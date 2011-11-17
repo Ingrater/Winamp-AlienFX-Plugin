@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<config>
+  <!-- How much delayed the beat displaying is. If it blinks to late increase this value, if it blinks to early decrease it. -->
+  <!-- this value has to be >= 0 !! -->
+  <delay value="0" />
+</config>

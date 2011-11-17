@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<config>
+    <!-- How much delayed the beat displaying is. If it blinks to late increase this value, if it blinks to early decrease it. -->
+    <!-- this value has to be >= 0 !! -->
+    <delay value="0" />
+    <!-- below are all saved values from the sliders -->
+    <energy>
+        <slider id="0" value="0.840000" />
+        <slider id="1" value="1.760000" />
+        <slider id="2" value="1.640000" />
+        <slider id="3" value="2.000000" />
+        <slider id="4" value="1.760000" />
+        <slider id="5" value="1.880000" />
+        <slider id="6" value="1.880000" />
+        <slider id="7" value="1.400000" />
+    </energy>
+    <variance>
+        <slider id="0" value="88.000000" />
+        <slider id="1" value="92.000000" />
+        <slider id="2" value="116.000000" />
+        <slider id="3" value="188.000000" />
+        <slider id="4" value="148.000000" />
+        <slider id="5" value="196.000000" />
+        <slider id="6" value="160.000000" />
+        <slider id="7" value="20.000000" />
+    </variance>
+    <factor>
+        <slider id="0" value="1.000000" />
+        <slider id="1" value="1.260000" />
+    </factor>
+</config>

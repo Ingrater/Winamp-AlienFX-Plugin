@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="winamp-alienfx-plugin" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\vis_winamp-alienfx-plugin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+				</Linker>
+				<ExtraCommands>
+					<Add after='copy &quot;C:\CodeBlocks Nightly\projekte\versuche\winamp-alienfx-plugin\bin\Debug\vis_winamp-alienfx-plugin.dll&quot; Z:\ /Y' />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\vis_winamp-alienfx-plugin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="user32" />
+					<Add library="D:\boost_1_40_0\bin.v2\libs\thread\build\gcc-mingw-4.4.0\release\link-static\threading-multi\libboost_thread-mgw44-mt-1_40.lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="release.bat" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release Laptop">
+				<Option output="bin\Release\vis_winamp-alienfx-plugin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="user32" />
+					<Add library="C:\boost_1_40_0\bin.v2\libs\thread\build\gcc-mingw-4.4.0\release\link-static\threading-multi\libboost_thread-mgw44-mt-1_40.lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="release-laptop.bat" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Debug Laptop">
+				<Option output="bin\Debug\vis_winamp-alienfx-plugin" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option host_application="C:\Program Files (x86)\Winamp\winamp.exe" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+					<Add library="C:\boost_1_40_0\bin.v2\libs\thread\build\gcc-mingw-4.4.0\release\link-static\threading-multi\libboost_thread-mgw44-mt-1_40.lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="debug-laptop.bat" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-D_UNICODE" />
+			<Add option="-DUNICODE" />
+			<Add option="-DMINGW" />
+		</Compiler>
+		<Linker>
+			<Add library="libhid" />
+			<Add library="libsetupapi" />
+			<Add library="libkernel32" />
+			<Add library="opengl32" />
+			<Add library="gdi32" />
+			<Add library="glu32" />
+			<Add library="comdlg32" />
+		</Linker>
+		<Unit filename="Button.cpp" />
+		<Unit filename="Button.h" />
+		<Unit filename="ListBox.cpp" />
+		<Unit filename="ListBox.h" />
+		<Unit filename="Slider.cpp" />
+		<Unit filename="Slider.h" />
+		<Unit filename="XmlConfig.cpp" />
+		<Unit filename="XmlConfig.h" />
+		<Unit filename="Zone.cpp" />
+		<Unit filename="Zone.h" />
+		<Unit filename="_kiss_fft_guts.h" />
+		<Unit filename="alienfx.cpp" />
+		<Unit filename="alienfx.h" />
+		<Unit filename="alienfx_vis_config.xml" />
+		<Unit filename="callback.h" />
+		<Unit filename="config.cpp" />
+		<Unit filename="config.h" />
+		<Unit filename="kiss_fft.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="kiss_fft.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Unit filename="release.script" />
+		<Unit filename="resource.h" />
+		<Unit filename="resource.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="timer.cpp" />
+		<Unit filename="timer.h" />
+		<Unit filename="tinystr.cpp" />
+		<Unit filename="tinyxml.cpp" />
+		<Unit filename="tinyxml.h" />
+		<Unit filename="tinyxmlerror.cpp" />
+		<Unit filename="tinyxmlparser.cpp" />
+		<Unit filename="window.cpp" />
+		<Unit filename="window.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

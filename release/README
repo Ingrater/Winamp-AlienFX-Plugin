@@ -1,0 +1,81 @@
+alienfx-winamp visualization plugin
+copyright 2008 Benjamin Thaut (http://3d.benjamin-thaut.de)
+
+See COPYRIGHT for the copyright
+See LICENSE for the license
+
+WARNING
+=======
+This plugin is work-in-progress and is neither bug-free nor fully working yet! Use it at your own risk. See LICENSE for details.
+
+INSTALL
+=======
+copy the libgcc_s_dw2-1.dll to your root Winamp directory (typically C:\Program Files\Winamp
+copy the vis_winamp-alienfx-plugin.dll to the Winamp\Plugins directory
+copy the alienfx_vis_config.xml to your appdata\Winamp\Plugins directory (C:\Users\Your Username\appdata\Roaming\Winamp\Plugins for Vista and 7).
+	Note that the appdata folder is a hidden folder.  You must enable hidden files and folders in order to find it!
+
+INITIAL CONFIGURE
+=================
+Currently there is one value "delay" which can only be changed by editing the vis_alienfx_config.xml. The descriptions for this values are
+in the xml file.
+
+STARTUP
+=======
+Open Winamp.  Go to preferences, then Visualization.  "Alienfx Visualization plugin" should be displayed as a choice.
+Click it and click "Start."  NOTE - on initial opening, you will see an error about a missing file.  Hit OK and ignore it.
+The plugin will now create a settings xml file to go along with the config xml file you copied earlier.
+
+CONFIGURING WHILE RUNNING WINAMP
+================================
+Hit Alt + K in order to bring up the configuration window.  You will see a series of sliders and a few boxes.  The sliders represent
+different frequencies - lower frequencies (bass) to the left; higher frequencies (treble) to the right.  The two sets of sliders are used
+to detect the beat and trigger the LED's.  The trigger will only occur when both Sound Energy and Energy Variance are above the slider.
+This will show a color change in the bars from green to red.  This is also displayed in more detail on a popup window.
+
+The next two sliders, Absolute and Relative variance, control the amount of absolute and relative variance which is used to compute beats.
+For example, if you set the first slider to 1.0 and the second to 0.0, the resulting variance only consits of absolute variance. Absolute
+variance preferes high sound energy which mostly occur in low frequencies. So this is good for detecting bass beats. The relative variance
+does not prefer any frequencies and thus outputs the same variance values for all frequecies. Use this to "amp up" the Energy Variance.
+Play around with these options - they will take some getting used to!
+
+The bottom of the window is where you will program in your zones.  Click the Add button and then type in a title, such as "speakers."  Next,
+highlight the zone and click the Edit button. You can choose one or more frequencies for the zone to monitor.  To do this, click the frequency
+and click the < button.  Do the same for the LEDs you want to beat with the frequency.  Finally, choose the color (or check random). Hit close.
+Repeat these steps for any and all the LEDs you wish to have controled.  The combinations are endless.
+
+Use the above three paragraphs to help you configure and personalize your plugin.  Do not be frustrated if it does not work right away.
+Once you have finished configuring the LED's, click "Save Config."  You may want to do this often just in case of crashes.
+
+SAMPLE CONFIGURATION
+====================
+Lord_Zath has the following configuration.  While it doesn't work 100%, this may be a good place to start.
+
+Zones
+
+Speakers - left speaker, right speaker, touchpad set to frequency band 1 (bass line).  Blue color.
+Keyboard - Keyboard left, Keyboard middle right, Keyboard middle left set to bands 13-16 (mids).  Green color.
+Uppers - Alienhead, alienware logo set to bands 29-32.  Red color.
+Numbpad - Keyboard right, frequency bands 21-24.  Green color.
+
+Sliders
+
+Sound Energy - 2.04 across the board.
+Energy Variance - 52.00 across the board; frequencies 1-4 all the way to 0.
+Absolute Variance - 0.00
+Relative Variance - 0.50
+
+
+KNOWN BUGS
+==========
+NONE
+
+Please notify Ingrater via the notebookreview forums (www.notebookreview.com)
+or via http://3d.benjamin-thaut.de if you experience such a crash.
+Please provide the following information:
+
+Model:
+Operating System:
+Winamp Version:
+What you did that caused the crash:
+How the crash effected the plugin (does it still work?):
