@@ -25,7 +25,9 @@ Thanks for the help everyone!
 #include "config.h"
 #include "Slider.h"
 #include "XmlConfig.h"
+#include "XmlDevices.h"
 #include "Zone.h"
+#include "debug.h"
 #ifdef USE_STACK_WALKER
 #include "MyStackWalker.h"
 #endif
@@ -44,6 +46,13 @@ float round(float pValue){
 	return floor(pValue + 0.5f);
 }
 
+enum InitState
+{
+	INIT_IN_PROGRESS,
+	INIT_SUCCESSFULL,
+	INIT_FAILED
+};
+
 HWND hOtherWindow = NULL;
 boost::thread *worker = NULL;
 float energy_factor = 1.3f;
@@ -53,6 +62,7 @@ extern Slider *EnergySlider[8];
 extern Slider *VarianceSlider[8];
 extern Slider *FactorSlider[2];
 bool test = false;
+volatile InitState threadInitState = INIT_IN_PROGRESS;
 extern bool RenderWindowVisible;
 
 winampVisHeader header = {
@@ -62,7 +72,6 @@ winampVisHeader header = {
 };
 
 bool ReplaceEnvironmentVars(std::string& str);
-bool XmlAlienfxInit();
 
 winampVisModule module;
 void FillModule(){
@@ -101,29 +110,6 @@ BeatState beat[32];
 bool running = true;
 
 // event functions follow
-
-void SendMyMessage(int pId, const std::wstring& pString, int pRGB){
-  if(hOtherWindow != NULL){
-    //Debugmessage verschicken
-    //Platz schaffen für den string + \0 + eine int
-    size_t buffer_size = (pString.length()+1)*sizeof(wchar_t) + sizeof(int);
-    boost::scoped_ptr<char> buffer(new char[buffer_size]);
-    //RGB einfügen
-    memcpy(buffer.get(),&pRGB,sizeof(int));
-    //String einfügen
-    memcpy(buffer.get()+sizeof(int),pString.c_str(),(pString.length()+1)*sizeof(wchar_t));
-
-    COPYDATASTRUCT copydata;
-    copydata.dwData = (DWORD)pId;
-    copydata.cbData = buffer_size;
-    copydata.lpData = buffer.get();
-
-    SendMessage(hOtherWindow,WM_COPYDATA,(WPARAM)module.hwndParent,(LPARAM)&copydata);
-  }
-  else {
-    Sleep(3);
-  }
-}
 
 byte LastData[2][576];
 kiss_fft_cpx FftIn[2][1024];
@@ -366,6 +352,14 @@ int ToAlienfxColor(int pColor){
 void MyWork();
 #endif
 
+struct WorkCleanup
+{
+	~WorkCleanup()
+	{
+		AlienfxDeinit();
+	}
+};
+
 void work(){
 #	ifdef USE_STACK_WALKER
 	__try {
@@ -378,8 +372,40 @@ void work(){
 }
 void MyWork(){
 #endif
+	byte status;
 
-  byte status;
+	//Setup
+	if(!LoadXmlDevices())
+	{
+		if(!AlienfxInit()){
+			MessageBox(HWND_DESKTOP, L"Alienware Device not found. Plugin not active!", L"Error", MB_OK);
+			threadInitState = INIT_FAILED;
+			return;
+		}
+	}
+
+	WorkCleanup cleanup;
+
+	/// test leds
+	dprintf("waiting for busy");
+	status = AlienfxWaitForBusy();
+	dprintf("initial reset (busy status %x)",status);
+	AlienfxReset(ALIENFX_ALL_ON);
+  Sleep(3);
+	dprintf("initial wait for ready");
+  status = AlienfxWaitForReady();
+	dprintf("initial status %x",status);
+
+	dprintf("running test command");
+	AlienfxSetColor(ALIENFX_STAY, 1, 0xFFFFFFFF, 0);
+  AlienfxEndLoopBlock();
+  AlienfxEndTransmitionAndExecute();
+
+	dprintf("thread init successfull");
+
+	threadInitState = INIT_SUCCESSFULL;
+
+	dprintf("starting alienfx loop");
   while(running){
 
     std::vector<ZoneInfo> CommandsToSend;
@@ -396,7 +422,7 @@ void MyWork(){
       if(beat[i] != BS_WAIT && FreqBandUsage[i] != NULL){
         Zone *zone = FreqBandUsage[i];
         if(zone->GetUsed() == false){
-          SendMyMessage(0,std::wstring(L"Found beat"),0);
+          dprintf("Found beat");
           zone->SetUsed(true);
           ZoneInfo info;
           info._Leds = zone->GetLedBits();
@@ -414,16 +440,14 @@ void MyWork(){
 			if(!running) return;
       status = AlienfxWaitForBusy();
       if(status == 0x06){
-        SendMyMessage(0,std::wstring(L"Reinit wait for busy"),0);
+        dprintf("Reinit wait for busy");
         Sleep(1000);
 				if(!running) return;
         AlienfxReinit();
         continue;
       }
       else if(status != 0x11){
-        wchar_t temp[1024];
-        swprintf(temp,L"Skip 0x11 current 0x%x",status);
-        SendMyMessage(0,std::wstring(temp),0);
+        dprintf("Skip 0x11 current 0x%x",status);
         Sleep(50);
 				if(!running) return;
         continue;
@@ -433,7 +457,7 @@ void MyWork(){
 			if(!running) return;
       status = AlienfxWaitForReady();
       if(status == 0x06){
-        SendMyMessage(0,std::wstring(L"Reinit wait for ready"),0);
+        dprintf("Reinit wait for ready");
         Sleep(1000);
 				if(!running) return;
         AlienfxReinit();
@@ -446,7 +470,7 @@ void MyWork(){
 					if(!running) return;
           status = AlienfxWaitForReady();
           if(status == 0x06){
-            SendMyMessage(0,std::wstring(L"Reinit wait for ready"),0);
+            dprintf("Reinit wait for ready");
             Sleep(1000);
 						if(!running) return;
             AlienfxReinit();
@@ -454,9 +478,7 @@ void MyWork(){
           }
         }
         else {
-          wchar_t temp[1024];
-          swprintf(temp,L"Skip 0x10 current 0x%x",status);
-          SendMyMessage(0,std::wstring(temp),0);
+          dprintf("Skip 0x10 current 0x%x",status);
           Sleep(50);
 					if(!running) return;
           continue;
@@ -465,6 +487,7 @@ void MyWork(){
       for(size_t i=0;i<CommandsToSend.size();i++){
         ZoneInfo& info = CommandsToSend[i];
 
+				dprintf("sending command for leds %x color %x",info._Leds, info._Color);
         AlienfxSetColor(ALIENFX_STAY, i+1, info._Leds, info._Color);
         AlienfxEndLoopBlock();
       }
@@ -620,17 +643,27 @@ int init(winampVisModule* pVisModule) {
 int MyInit(winampVisModule* pVisModule){
 #endif
 	running = true;
-  hOtherWindow = FindWindow(L"MsgTest1",NULL);
-  //if(hOtherWindow == NULL)
-    //MessageBox(module.hwndParent, L"Warning: Debug Window not found", L"", MB_OK);
-	if(!XmlAlienfxInit()){
-		//Xml might opened a device but encountered a xml error afterwards
-		AlienfxDeinit();
-		if(!AlienfxInit()){
-			MessageBox(module.hwndParent, L"Alienware Device not found. Plugin not active!", L"", MB_OK);
-			return 1;
-		}
+
+	worker = new boost::thread(work);
+	for(int i=0; i<20 && threadInitState == INIT_IN_PROGRESS; i++)
+	{
+		Sleep(100);
 	}
+	if(threadInitState != INIT_SUCCESSFULL)
+	{
+		MessageBoxA(HWND_DESKTOP, "No AlienFX device found. Plugin will not work", "Error", MB_OK);
+		if(!worker->timed_join(boost::posix_time::milliseconds(200))){
+			dprintf("Killing thread");
+			TerminateThread(worker->native_handle(),0);
+		}
+		else {
+			dprintf("thread exited normally");
+		}
+		delete worker;
+		worker = NULL;
+		return 1;
+	}
+
   avgs.resize(64);
   sys::MainTimer = new sys::Timer();
   LastRender = new sys::Zeitpunkt(sys::MainTimer);
@@ -656,8 +689,6 @@ int MyInit(winampVisModule* pVisModule){
     return 1;
   }
 
-	worker = new boost::thread(work);
-
   //Test if the alienfx device does respond
   //beat_color = 0x0F0000;
   /*test = true;
@@ -670,107 +701,8 @@ int MyInit(winampVisModule* pVisModule){
   char path[500];
   GetModuleFileNameA(module.hDllInstance,path,500);
 
-  wchar_t Message[1024];
-  swprintf(Message,L"Sample Rate is %i\nInit Complete",module.sRate);
-  std::wstring String = Message;
-  SendMyMessage(1,String,0);
+  dprintf("Sample Rate is %i\nInit Complete",module.sRate);
   return 0;
-}
-
-bool parseHex(const char* productId, int& iProductId){
-	if(!productId)
-		return false;
-	int length = strlen(productId);
-	if(length < 3 || productId[0]!='0' || productId[1] != 'x')
-		return false;
-	iProductId = 0;
-	int digitValue = 1;
-	for(int i=0;i<length-2;i++){
-		int cur = length - i - 1;
-		int value = 0;
-		if(productId[cur] >= '0' && productId[cur] <= '9')
-			value = productId[cur] - '0';
-		else if(productId[cur] >= 'A' && productId[cur] <= 'F')
-			value = productId[cur] - 'A' + 10;
-		else if(productId[cur] >= 'a' && productId[cur] <= 'f')
-			value = productId[cur] - 'a' + 10;
-		else
-			return false;
-		iProductId += value * digitValue;
-		digitValue *= 16;
-	}
-	return true;
-}
-
-bool XmlAlienfxInit(){
-  std::string pFilename = "%APPDATA%\\Winamp\\Plugins\\alienfx_vis_devices.xml";
-  ReplaceEnvironmentVars(pFilename);
-
-  FILE *datei = fopen(pFilename.c_str(),"r");
-  if(datei == NULL){
-    return false;
-  }
-  fclose(datei);
-
-  TiXmlDocument XmlFile (pFilename.c_str());
-  XmlFile.SetCondenseWhiteSpace(false);
-  if(!XmlFile.LoadFile()){
-    MessageBoxA(HWND_DESKTOP,XmlFile.ErrorDesc(),"Error", MB_OK);
-    return false;
-  }
-
-	TiXmlNode* pMainNode = XmlFile.FirstChild("devices");
-	for(TiXmlNode* pDevice = pMainNode->FirstChild("device");pDevice != NULL; pDevice = pDevice->NextSibling("device")){
-		TiXmlElement* pElement = pDevice->ToElement();
-		const char* name = pElement->Attribute("name");
-		if(name == NULL){
-			MessageBoxA(HWND_DESKTOP,"Missing name attribute in device node","Xml Error", MB_OK | MB_ICONERROR);
-			return false;
-		}
-		int protocolVersion = -1;
-		if(pElement->Attribute("protocolVersion",&protocolVersion)){
-			if(protocolVersion < 1 || protocolVersion > 2){
-				MessageBoxA(HWND_DESKTOP,"Wrong protocol version in device node","Xml Error", MB_OK | MB_ICONERROR);
-				return false;
-			}
-		}
-		const char* productId = pElement->Attribute("productId");
-		if(productId == NULL){
-			MessageBoxA(HWND_DESKTOP,"Missing productId attribute in device node","Xml Error",MB_OK | MB_ICONERROR);
-			return false;
-		}
-		int iProductId=0;
-		if(!parseHex(productId,iProductId)){
-			MessageBoxA(HWND_DESKTOP,"Invalid productId in device node","Xml Error",MB_OK | MB_ICONERROR);
-			return false;
-		}
-		if(AlienfxInitDevice(iProductId,(protocolVersion > 2))){
-			Zone::SetModel(CUSTOM_MODEL);
-			//Load Leds
-			for(TiXmlNode* pLed = pDevice->FirstChild("led"); pLed != NULL; pLed = pLed->NextSibling("led"))
-			{
-				pElement = pLed->ToElement();
-				const char* ledName = pElement->Attribute("name");
-				if(ledName == NULL){
-					MessageBoxA(HWND_DESKTOP,"Missing name attribute for led node","Xml Error", MB_OK | MB_ICONERROR);
-					return false;
-				}
-				const char* ledBit = pElement->Attribute("code");
-				if(ledBit == NULL){
-					MessageBoxA(HWND_DESKTOP,"Missing code attribute for led node","Xml Error", MB_OK | MB_ICONERROR);
-					return false;
-				}
-				int iLedBit = 0;
-				if(!parseHex(ledBit,iLedBit)){
-					MessageBoxA(HWND_DESKTOP,"Invalid code attribute for led node","Xml Error", MB_OK | MB_ICONERROR);
-					return false;
-				}
-				Zone::AddCustomLed(ledName,iLedBit);
-			}
-			return true;
-		}
-	}
-	return false;
 }
 
 #ifdef USE_STACK_WALKER
@@ -814,25 +746,26 @@ void MyQuit(winampVisModule* pVisModule){
   XmlDeinit();
   running = false;
 	if(!worker->timed_join(boost::posix_time::milliseconds(200))){
-		SendMyMessage(0,std::wstring(L"Killing thread"),0);
+		dprintf("Killing thread");
 		TerminateThread(worker->native_handle(),0);
 	}
 	else {
-		SendMyMessage(0,std::wstring(L"thread exited normally"),0);
+		dprintf("thread exited normally");
 	}
   free(kiss_fft_state);
-  AlienfxDeinit();
   DestroyOpenGLWindow();
   DestroyConfigWindow();
 	delete worker;
   delete LastRender;
   delete sys::MainTimer;
-	SendMyMessage(0,std::wstring(L"Alienfx Visualization Ended successfully"),0);
+	dprintf("Alienfx Visualization Ended successfully");
+	CloseDebugConsole();
 }
 
 winampVisModule* GetModule(int which){
   switch(which){
     case 0:
+			OpenDebugConsole();
       FillModule();
       return &module;
       break;

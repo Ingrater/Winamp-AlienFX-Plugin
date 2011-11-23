@@ -54,23 +54,13 @@
 #define ALIENFX_AP_M11X_POWER_BUTTON            0x0002000
 #define ALIENFX_AP_M11X_POWER_BUTTON_EYES       0x0004000
 
-#define ALIENFX_M17X_R3_KEYBOARD_RIGHT          0x0000001
-#define ALIENFX_M17X_R3_KEYBOARD_MIDDLE_RIGHT   0x0000002
-#define ALIENFX_M17X_R3_KEYBOARD_MIDDLE_LEFT    0x0000004
-#define ALIENFX_M17X_R3_KEYBOARD_LEFT           0x0000008
-#define ALIENFX_M17X_R3_LEFT_SPEAKER            0x0000020
-#define ALIENFX_M17X_R3_RIGHT_SPEAKER           0x0000040
-#define ALIENFX_M17X_R3_ALIENWARE_LOGO          0x0000100
-#define ALIENFX_M17X_R3_TOUCHPAD                0x0000200
-#define ALIENFX_M17X_R3_TOUCHPANEL              0x0000800
-
 #define ALIENFX_DEVICE_RESET 0x06
 #define ALIENFX_READY 0x10
 #define ALIENFX_BUSY 0x11
 #define ALIENFX_UNKOWN_COMMAND 0x12
 
-bool AlienfxInitDevice(int productId, bool newDevice);
 bool AlienfxInit();
+bool AlienfxInitDevice(int deviceId, int protocolVersion);
 void AlienfxDeinit();
 
 void AlienfxReset(byte pOptions);

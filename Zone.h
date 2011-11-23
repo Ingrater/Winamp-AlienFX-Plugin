@@ -12,9 +12,8 @@ enum SupportedModels {
   ALL_POWERFULL_M17X = 1,
   ALL_POWERFULL_M15X = 2,
   ALL_POWERFULL_M11X = 3,
-  M17X_R3 = 4,
-	CUSTOM_MODEL = 5,
-  LAST_MODEL = CUSTOM_MODEL
+  LAST_MODEL = ALL_POWERFULL_M11X,
+	CUSTOM_MODEL = 128
 };
 
 class Zone {
@@ -82,12 +81,14 @@ class Zone {
     inline int GetLedBits() const {return _LedBits;}
 
     static void SetModel(SupportedModels pModel);
-		static void AddCustomLed(const char* name, int ledBit);
     static SupportedModels GetModel(){return _Model;}
     static TiXmlElement* StaticToXml();
     static void StaticFromXml(TiXmlElement *pElement);
     static void PreXmlLoad();
     static class Zone** GetFreqBandUsage(){return _FreqBandUsage;}
+
+		static void PrepareCustomModel();
+		static void AddCustomLed(std::wstring name, int ledBit);
 };
 #endif // _ZONE_H_
 

@@ -185,6 +185,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\debug.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\kiss_fft.c"
 				>
 			</File>
@@ -237,6 +241,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\XmlDevices.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Zone.cpp"
 				>
 			</File>
@@ -264,6 +272,10 @@
 			</File>
 			<File
 				RelativePath="..\config.h"
+				>
+			</File>
+			<File
+				RelativePath="..\debug.h"
 				>
 			</File>
 			<File
@@ -312,6 +324,10 @@
 			</File>
 			<File
 				RelativePath="..\XmlConfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\XmlDevices.h"
 				>
 			</File>
 			<File

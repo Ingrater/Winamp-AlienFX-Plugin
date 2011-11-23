@@ -13,6 +13,7 @@ extern "C" {
 #include <boost/scoped_ptr.hpp>
 #include <string>
 #include "zone.h"
+#include "debug.h"
 
 //#define ALIENFX_DEBUG
 #ifdef ALIENFX_DEBUG
@@ -92,22 +93,35 @@ bool FindDevice(int pVendorId, int pProductId, std::wstring& pDevicePath){
   return flag;
 }
 
-bool AlienfxInitDevice(int productId, bool newDevice){
-	if(FindDevice(0x187c,productId,AlienfxDeviceName)){
+bool AlienfxInitDevice(int deviceId, int protocolVersion)
+{
+	dprintf("trying device %x protoclVersion %d",deviceId,protocolVersion);
+	if(FindDevice(0x187c,deviceId,AlienfxDeviceName))
+	{
 		hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-    if(hDeviceHandle == NULL)
-      return false;
-    AlienfxNew = newDevice;
-    return true;
+		if(hDeviceHandle == NULL)
+			return false;
+		if(protocolVersion > 1)
+			AlienfxNew = true;
+		return true;
 	}
 	return false;
 }
 
+bool AlienfxOpenDevice()
+{
+	hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+	if(hDeviceHandle == NULL)
+		return false;
+	return true;
+}
+
 bool AlienfxInit(){
   #ifdef ALIENFX_DEBUG
-  std::cout << "FindDevice" << std::endl;
+  dprintf("AlienfxInit");
   #endif
   if(FindDevice(0x187c,0x511,AlienfxDeviceName)){
+		dprintf("found hardcoded 0x187c,0x511");
     hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
     if(hDeviceHandle == NULL)
       return false;
@@ -115,9 +129,7 @@ bool AlienfxInit(){
     return true;
   }
   if(FindDevice(0x187c,0x512,AlienfxDeviceName)){
-    #ifdef ALIENFX_DEBUG
-    std::cout << "Opening new alienfx device" << std::endl;
-    #endif
+    dprintf("found hardcoded 0x187c,0x512");
     hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
     if(hDeviceHandle == NULL)
       return false;
@@ -126,24 +138,11 @@ bool AlienfxInit(){
     return true;
   }
   if(FindDevice(0x187c,0x514,AlienfxDeviceName)){
-    #ifdef ALIENFX_DEBUG
-    std::cout << "Opening m11x alienfx device" << std::endl;
-    #endif
+    dprintf("found hardcoded 0x187c,0x514");
     hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
     if(hDeviceHandle == NULL)
       return false;
     Zone::SetModel(ALL_POWERFULL_M11X);
-    AlienfxNew = true;
-    return true;
-  }
-  if(FindDevice(0x187c,0x520,AlienfxDeviceName)){
-    #ifdef ALIENFX_DEBUG
-    std::cout << "Opening m17x r3 alienfx device" << std::endl;
-    #endif
-    hDeviceHandle = CreateFile(AlienfxDeviceName.c_str(), GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
-    if(hDeviceHandle == NULL)
-      return false;
-    Zone::SetModel(M17X_R3);
     AlienfxNew = true;
     return true;
   }

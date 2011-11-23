@@ -3,8 +3,7 @@
 #include "resource.h"
 #include <boost/scoped_array.hpp>
 #include <math.h>
-
-void SendMyMessage(int pId, const std::wstring& pString, int pRGB);
+#include "debug.h"
 
 extern std::vector<Zone*> Zones;
 
@@ -30,15 +29,22 @@ Zone::~Zone(){
   }
 }
 
-void Zone::AddCustomLed(const char* name, int ledBit){
-	size_t oldSize = _Leds.size();
-	_Leds.resize(oldSize + 1);
+void Zone::PrepareCustomModel()
+{
+	for(int i=0;i<32;i++)
+    _FreqBandUsage[i] = NULL;
 
-	std::string sname = name;
+  _Model = CUSTOM_MODEL;
+  _Leds.clear();
+}
 
-	_Leds[oldSize]._Name = std::wstring(sname.begin(),sname.end());
-	_Leds[oldSize]._LedBit = ledBit;
-	_Leds[oldSize]._Used = false;
+void Zone::AddCustomLed(std::wstring name, int ledBit)
+{
+	Led led;
+	led._Name = name;
+	led._LedBit = ledBit;
+	led._Used = false;
+	_Leds.push_back(led);
 }
 
 void Zone::SetModel(SupportedModels pModel){
@@ -184,47 +190,6 @@ void Zone::SetModel(SupportedModels pModel){
       _Leds[4]._LedBit = ALIENFX_AP_M11X_TOUCHPANEL;
       _Leds[4]._Used = false;
       break;
-    case M17X_R3:
-      _Leds.resize(9);
-
-      _Leds[0]._Name = L"Keyboard right";
-      _Leds[0]._LedBit = ALIENFX_M17X_R3_KEYBOARD_RIGHT;
-      _Leds[0]._Used = false;
-
-      _Leds[1]._Name = L"Keyboard middle right";
-      _Leds[1]._LedBit = ALIENFX_M17X_R3_KEYBOARD_MIDDLE_RIGHT;
-      _Leds[1]._Used = false;
-
-      _Leds[2]._Name = L"Keyboard middle left";
-      _Leds[2]._LedBit = ALIENFX_M17X_R3_KEYBOARD_MIDDLE_LEFT;
-      _Leds[2]._Used = false;
-
-      _Leds[3]._Name = L"Keyboard left";
-      _Leds[3]._LedBit = ALIENFX_M17X_R3_KEYBOARD_LEFT;
-      _Leds[3]._Used = false;
-
-      _Leds[4]._Name = L"right speaker";
-      _Leds[4]._LedBit = ALIENFX_M17X_R3_LEFT_SPEAKER;
-      _Leds[4]._Used = false;
-
-      _Leds[5]._Name = L"left speaker";
-      _Leds[5]._LedBit = ALIENFX_M17X_R3_RIGHT_SPEAKER;
-      _Leds[5]._Used = false;
-
-      _Leds[6]._Name = L"alienware logo";
-      _Leds[6]._LedBit = ALIENFX_M17X_R3_ALIENWARE_LOGO;
-      _Leds[6]._Used = false;
-
-      _Leds[7]._Name = L"touchpanel";
-      _Leds[7]._LedBit = ALIENFX_M17X_R3_TOUCHPANEL;
-      _Leds[7]._Used = false;
-
-      _Leds[8]._Name = L"touchpad";
-      _Leds[8]._LedBit = ALIENFX_M17X_R3_TOUCHPAD;
-      _Leds[8]._Used = false;
-      break;
-		case CUSTOM_MODEL:
-			break;
   }
 }
 
@@ -243,7 +208,7 @@ void Zone::RemoveFreqBand(int pIndex){
 
 void Zone::AddLed(int pIndex){
   if(pIndex < 0 || pIndex >= _Leds.size()){
-    SendMyMessage(0,std::wstring(L"AddLed out of bounds"),0);
+    dprintf("AddLed out of bounds");
     return;
   }
   if(!_Leds[pIndex]._Used){
@@ -256,14 +221,14 @@ void Zone::RemoveLed(int pIndex){
   if(pIndex >= 0 && static_cast<size_t>(pIndex) < _LedsInUse.size()){
     int Led = _LedsInUse[pIndex];
     if(Led < 0 || Led >= _Leds.size()){
-      SendMyMessage(0,std::wstring(L"RemoveLed Led out of bounds"),0);
+      dprintf("RemoveLed Led out of bounds");
       return;
     }
     _Leds[Led]._Used = false;
     _LedsInUse.erase(_LedsInUse.begin()+pIndex);
   }
   else {
-    SendMyMessage(0,std::wstring(L"RemoveLed out of bounds"),0);
+    dprintf("RemoveLed out of bounds");
   }
 }
 
@@ -371,9 +336,9 @@ LRESULT CALLBACK Zone::DialogProc(HWND hDlg, UINT uMsg,WPARAM wParam, LPARAM lPa
           break;
         case IDC_BTN5:
           {
-            SendMyMessage(0,std::wstring(L"Adding Led"),0);
+            dprintf("Adding Led");
             if(self == NULL || data == NULL){
-              SendMyMessage(0,std::wstring(L"self or data is NULL"),0);
+              dprintf("self or data is NULL");
               return FALSE;
             }
             int sel = data->LedBoxRight->GetSelection();
@@ -383,7 +348,7 @@ LRESULT CALLBACK Zone::DialogProc(HWND hDlg, UINT uMsg,WPARAM wParam, LPARAM lPa
             }
             int id = data->LedBoxRight->GetData(sel);
             if(data->LedBoxRight->GetText(sel).c_str() == NULL){
-              SendMyMessage(0,std::wstring(L"Text is NULL"),0);
+              dprintf("Text is NULL");
               return FALSE;
             }
             data->LedBoxLeft->AppendEntry(data->LedBoxRight->GetText(sel).c_str(),id);
@@ -436,9 +401,7 @@ LRESULT CALLBACK Zone::DialogProc(HWND hDlg, UINT uMsg,WPARAM wParam, LPARAM lPa
                                    ((cc.rgbResult      ) & 0x00FF00) |
                                    ((cc.rgbResult << 16) & 0xFF0000);
 
-              wchar_t debug[256];
-              swprintf(debug,L"Color is %x",data->self->_Color);
-              SendMyMessage(0,std::wstring(debug),0);
+              dprintf("Color is %x",data->self->_Color);
 
               //Display color
               HBITMAP oldBitmap = (HBITMAP)SendMessage(GetDlgItem(hDlg,IDC_BTN7),BM_GETIMAGE,(WPARAM)IMAGE_BITMAP,(LPARAM)NULL);
@@ -612,7 +575,7 @@ void Zone::GenerateLedBits(){
   _LedBits = 0;
   for(size_t i=0;i<_LedsInUse.size();i++){
     if(_LedsInUse[i] < 0 || _LedsInUse[i] >= _Leds.size()){
-      SendMyMessage(0,std::wstring(L"GenerateLedBits out of bounds"),0);
+      dprintf("GenerateLedBits out of bounds");
       continue;
     }
     _LedBits |= _Leds[_LedsInUse[i]]._LedBit;

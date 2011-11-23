@@ -18,7 +18,7 @@
 
 // main structure with plugin information, version, name...
 struct winampVisModule{
-  const char *description;             // name/title of the plugin
+  char *description;             // name/title of the plugin
   HWND hwndParent;               // hwnd of the Winamp client main window (stored by Winamp when dll is loaded)
   HINSTANCE hDllInstance;        // hinstance of this plugin DLL. (stored by Winamp when dll is loaded)
   size_t sRate;                  // sample rate (filled by winamp)
@@ -42,7 +42,7 @@ struct winampVisModule{
 
 struct winampVisHeader {
   int version;
-  const char *description;
+  char *description;
   winampVisModule* (*GetModule)(int which);
 };
 
@@ -56,7 +56,6 @@ int  init(winampVisModule* pVisModule);
 int  render(winampVisModule* pVisModule);
 void quit(winampVisModule* pVisModule);
 winampVisModule* GetModule(int which);
-void SendMyMessage(int pId, const std::wstring& pString, int pRGB);
 
 #ifdef __cplusplus
 extern "C"

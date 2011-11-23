@@ -44,15 +44,15 @@
 	<windows.h>
 	<time.h>
 
-1253466484 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\timer.cpp
+1253462884 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\timer.cpp
 	"timer.h"
 	"assert.h"
 
-1236106380 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\timer.h
+1236102780 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\timer.h
 	<windows.h>
 	<time.h>
 
-1305382121 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\alienfx.cpp
+1270050505 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\alienfx.cpp
 	"alienfx.h"
 	<Setupapi.h>
 	<ddk/hidsdi.h>
@@ -62,20 +62,19 @@
 	<hidsdi.h>
 	<boost/scoped_ptr.hpp>
 	<string>
-	"zone.h"
 	<iostream>
 
-1305381521 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\alienfx.h
+1270015240 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\alienfx.h
 	<windows.h>
 
-1219421888 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\kiss_fft.c
+1219418288 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\kiss_fft.c
 	"_kiss_fft_guts.h"
 
-1128670170 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\_kiss_fft_guts.h
+1128666570 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\_kiss_fft_guts.h
 	"kiss_fft.h"
 	<limits.h>
 
-1219419598 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\kiss_fft.h
+1219415998 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\kiss_fft.h
 	<stdlib.h>
 	<stdio.h>
 	<math.h>
@@ -151,7 +150,7 @@
 	<boost/function.hpp>
 	<map>
 
-1288521484 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\main.cpp
+1288517884 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\main.cpp
 	"main.h"
 	"alienfx.h"
 	"timer.h"
@@ -170,14 +169,14 @@
 	"Zone.h"
 	"MyStackWalker.h"
 
-1305382217 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\main.h
+1269951834 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\main.h
 	<windows.h>
 	<string>
 
-1270294128 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\window.h
+1270290528 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\window.h
 	<windows.h>
 
-1158685476 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxml.h
+1158681876 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxml.h
 	<ctype.h>
 	<stdio.h>
 	<stdlib.h>
@@ -188,39 +187,39 @@
 	<sstream>
 	"tinystr.h"
 
-1158685476 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinystr.h
+1158681876 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinystr.h
 	<assert.h>
 	<string.h>
 
-1267368628 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\config.h
+1267365028 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\config.h
 	<windows.h>
 	<boost/function.hpp>
 	<map>
 	"callback.h"
 
-1158685476 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinystr.cpp
+1158681876 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinystr.cpp
 	"tinystr.h"
 
-1158685476 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxml.cpp
+1158681876 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxml.cpp
 	<ctype.h>
 	<sstream>
 	<iostream>
 	"tinyxml.h"
 
-1158685476 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxmlerror.cpp
+1158681876 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxmlerror.cpp
 	"tinyxml.h"
 
-1158685476 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxmlparser.cpp
+1158681876 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\tinyxmlparser.cpp
 	<ctype.h>
 	<stddef.h>
 	"tinyxml.h"
 	<windows.h>
 
-1270294172 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\window.cpp
+1270290572 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\window.cpp
 	"window.h"
 	<GL/gl.h>
 
-1270294280 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\config.cpp
+1270290680 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\config.cpp
 	"config.h"
 	<commctrl.h>
 	"Slider.h"
@@ -233,14 +232,14 @@
 	"XmlConfig.h"
 	"window.h"
 
-1269857676 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\slider.cpp
+1269854076 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\slider.cpp
 	"Slider.h"
 	"config.h"
 	"main.h"
 	<boost/bind.hpp>
 	<commctrl.h>
 
-1266670041 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\slider.h
+1266666441 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\slider.h
 	<windows.h>
 	<boost/function.hpp>
 
@@ -404,7 +403,7 @@
 	"XmlConfig.h"
 	"Zone.h"
 
-1288521910 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\xmlconfig.cpp
+1288518310 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\xmlconfig.cpp
 	<string>
 	<sstream>
 	<windows.h>
@@ -416,15 +415,15 @@
 	"Zone.h"
 	"main.h"
 
-1269960040 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\xmlconfig.h
+1269956440 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\xmlconfig.h
 
-1269960890 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\listbox.cpp
+1269957290 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\listbox.cpp
 	"ListBox.h"
 	"config.h"
 	<boost/scoped_array.hpp>
 	<boost/bind.hpp>
 
-1269611761 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\listbox.h
+1269608161 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\listbox.h
 	<vector>
 	<windows.h>
 	"callback.h"
@@ -454,37 +453,37 @@
 1269417579 source:d:\codeblocks nightly\projekte\versuche\winamp-alienfx-plugin\resource.rc
 	<windows.h>
 
-1269857557 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\button.cpp
+1269853957 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\button.cpp
 	"Button.h"
 	"config.h"
 	<boost/bind.hpp>
 
-1267126625 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\button.h
+1267123025 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\button.h
 	<windows.h>
 	<boost/function.hpp>
 
-1267368669 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\callback.h
+1267365069 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\callback.h
 	<boost/function.hpp>
 	<windows.h>
 	<map>
 
-1316533551 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\zone.h
+1270015310 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\zone.h
 	<windows.h>
 	<string>
 	<vector>
 	"ListBox.h"
 	"tinyxml.h"
 
-1305381930 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\zone.cpp
+1270015566 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\zone.cpp
 	"Zone.h"
 	"alienfx.h"
 	"resource.h"
 	<boost/scoped_array.hpp>
 	<math.h>
 
-1269861397 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\resource.h
+1269857797 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\resource.h
 
-1269864774 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\resource.rc
+1269861174 source:c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\resource.rc
 	<windows.h>
 
 1267368669 d:\codeblocks nightly\projekte\versuche\winamp-alienfx-plugin\callback.h
@@ -505,9 +504,9 @@
 	"resource.h"
 	<boost/scoped_array.hpp>
 
-1263726458 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\mystackwalker.h
+1263722858 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\mystackwalker.h
 	"StackWalker.h"
 
-1263725603 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\stackwalker.h
+1263722003 c:\codeblocksnightly\projekte\versuche\winamp-alienfx-plugin\stackwalker.h
 	<windows.h>
 
